@@ -1,0 +1,49 @@
+{
+  "name": "@kooperativa_team/sdk",
+  "version": "0.1.0",
+  "description": "Official Node.js / TypeScript SDK for the Kooperativa API. Enrich and search professional profiles and companies, track hiring signals and job changes, and manage webhook monitors.",
+  "keywords": [
+    "kooperativa",
+    "b2b",
+    "enrichment",
+    "data-enrichment",
+    "sdk",
+    "api-client"
+  ],
+  "license": "MIT",
+  "homepage": "https://kooperativa.io",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kooperativa-team/kooperativa-node.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kooperativa-team/kooperativa-node/issues"
+  },
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm,cjs --dts --clean",
+    "dev": "tsup src/index.ts --format esm,cjs --dts --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.9",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.3"
+  }
+}
