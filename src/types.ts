@@ -79,6 +79,14 @@ export interface PersonEnrichParams {
   username?: string;
   id?: string;
 }
+/**
+ * No `id`: the realtime endpoints query a live source that has never seen our
+ * data lake, so an internal id means nothing to it.
+ */
+export interface PersonRealtimeParams {
+  linkedin_url?: string;
+  username?: string;
+}
 
 export interface PersonCheckResult extends ApiEnvelope {
   exists: true;
@@ -93,6 +101,14 @@ export interface CompanyEnrichParams {
   username?: string;
   company_id?: string;
   id?: string;
+}
+/**
+ * Neither `company_id` nor `id`: the realtime endpoints query a live source
+ * that has never seen our data lake, so an internal id means nothing to it.
+ */
+export interface CompanyRealtimeParams {
+  linkedin_url?: string;
+  username?: string;
 }
 
 export interface CompanyCheckResult extends ApiEnvelope {

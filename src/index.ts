@@ -12,6 +12,7 @@ import type {
   CompanyHiringSignalsParams,
   CompanyHiringSignalsResponse,
   CompanyPastEmployeesResponse,
+  CompanyRealtimeParams,
   CompanyResult,
   CreateMonitorParams,
   HeadcountBySeniorityResponse,
@@ -25,6 +26,7 @@ import type {
   PersonEnrichParams,
   PersonJobChangesParams,
   PersonJobChangesResponse,
+  PersonRealtimeParams,
   PersonResult,
   PersonSimilarParams,
   PersonSimilarResponse,
@@ -73,6 +75,20 @@ export class Kooperativa {
     enrich: (params: PersonEnrichParams): Promise<{ data: PersonResult }> =>
       this.http.get('/person', params as Record<string, unknown>),
 
+    /**
+     * Same shape as `enrich`, but read from the live source instead of our data
+     * lake, and written back to it, so a following `enrich` returns this result.
+     * Accepts a URL or username only, never an id.
+     *
+     * Metered: $0.001 per call on top of the flat license, the only endpoint
+     * pair that is. A call is billed whenever the live source answered, so a
+     * 404 costs the same as a hit, and note that a 404 throws
+     * `KooperativaApiError` here, meaning a call that lands in your catch
+     * branch has still been billed. A 503 is never billed.
+     */
+    enrichRealtime: (params: PersonRealtimeParams): Promise<{ data: PersonResult }> =>
+      this.http.get('/person/realtime', params as Record<string, unknown>),
+
     /** Cheap existence check before a full lookup. Throws KooperativaApiError (404) if not held. */
     check: (params: PersonEnrichParams): Promise<PersonCheckResult> =>
       this.http.get('/person/check', params as Record<string, unknown>),
@@ -102,6 +118,20 @@ export class Kooperativa {
     /** Full company profile lookup by URL, username, company ID, or ID. */
     enrich: (params: CompanyEnrichParams): Promise<{ data: CompanyResult }> =>
       this.http.get('/company', params as Record<string, unknown>),
+
+    /**
+     * Same shape as `enrich`, but read from the live source instead of our data
+     * lake, and written back to it, so a following `enrich` returns this result.
+     * Accepts a URL or username only, never a company ID or id.
+     *
+     * Metered: $0.001 per call on top of the flat license, the only endpoint
+     * pair that is. A call is billed whenever the live source answered, so a
+     * 404 costs the same as a hit, and note that a 404 throws
+     * `KooperativaApiError` here, meaning a call that lands in your catch
+     * branch has still been billed. A 503 is never billed.
+     */
+    enrichRealtime: (params: CompanyRealtimeParams): Promise<{ data: CompanyResult }> =>
+      this.http.get('/company/realtime', params as Record<string, unknown>),
 
     /** Cheap existence check before a full lookup. Throws KooperativaApiError (404) if not held. */
     check: (params: CompanyEnrichParams): Promise<CompanyCheckResult> =>
